@@ -9,6 +9,7 @@ import com.luiz.minhasfinancas.exception.RegraNegocioException;
 import com.luiz.minhasfinancas.model.entity.Usuario;
 import com.luiz.minhasfinancas.model.repository.UsuarioRepository;
 import com.luiz.minhasfinancas.service.impl.UsuarioServiceImpl;
+import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,6 +17,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -29,11 +31,35 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 public class UsuarioServiceTest {
 
     UsuarioService service;
+    
+    @MockBean
     UsuarioRepository repository;
+    
     @BeforeEach
     public void setUp() {
-        repository = Mockito.mock(UsuarioRepository.class);
         service = new UsuarioServiceImpl(repository);
+    }
+    
+    @Test
+    public void deveAutenticarUmUsuarioComSucesso(){
+        //cenário
+        String email = "email@email.com.br";
+        String senha = "senha";
+        
+        Usuario usuario = Usuario
+                .builder()
+                .email(email)
+                .senha(senha)
+                .id(1l)
+                .build();
+        
+        Mockito.when( repository.findByEmail(email) ).thenReturn(Optional.of(usuario));
+        
+        //ação
+        Usuario result = service.autenticar(email, senha);
+        
+        //verificação
+        Assertions.assertNotNull(result);
     }
 
     @Test
