@@ -6,12 +6,16 @@
 package com.luiz.minhasfinancas.model.repository;
 
 import com.luiz.minhasfinancas.model.entity.Usuario;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  *
  * @author luiz
  */
-public interface UsuarioRepository extends JpaRepository<Usuario,Long>{
+public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
+
+    boolean existsByEmail(String email);
     
+    Optional<Usuario> findByEmail(String email);
 }
