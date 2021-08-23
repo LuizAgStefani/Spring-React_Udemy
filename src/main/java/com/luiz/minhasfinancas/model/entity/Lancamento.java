@@ -21,8 +21,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 
 /**
@@ -33,6 +35,8 @@ import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 @Builder
 @Entity
 @Table(name = "lancamento", schema = "financas")
+@NoArgsConstructor
+@AllArgsConstructor
 public class Lancamento implements Serializable {
     @Id
     @Column(name = "id")

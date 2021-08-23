@@ -6,6 +6,7 @@
 package com.luiz.minhasfinancas.service;
 
 import com.luiz.minhasfinancas.model.entity.Usuario;
+import java.util.Optional;
 
 /**
  *
@@ -17,4 +18,6 @@ public interface UsuarioService {
     Usuario salvarUsuario(Usuario usuario);
     
     void validarEmail(String email);
+    
+    Optional<Usuario> obterPorId(Long id);
 }
