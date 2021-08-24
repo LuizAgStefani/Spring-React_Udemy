@@ -7,7 +7,6 @@ package com.luiz.minhasfinancas.model.entity;
 
 import com.luiz.minhasfinancas.model.enums.TipoLancamento;
 import com.luiz.minhasfinancas.model.enums.StatusLancamento;
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import javax.persistence.Column;
@@ -24,7 +23,9 @@ import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 
 /**
@@ -37,9 +38,10 @@ import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 @Table(name = "lancamento", schema = "financas")
 @NoArgsConstructor
 @AllArgsConstructor
-public class Lancamento implements Serializable {
+@Setter
+public class Lancamento{
     @Id
-    @Column(name = "id")
+    @EqualsAndHashCode.Include
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     

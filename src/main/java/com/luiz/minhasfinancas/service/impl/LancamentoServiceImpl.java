@@ -8,14 +8,19 @@ package com.luiz.minhasfinancas.service.impl;
 import com.luiz.minhasfinancas.exception.RegraNegocioException;
 import com.luiz.minhasfinancas.model.entity.Lancamento;
 import com.luiz.minhasfinancas.model.enums.StatusLancamento;
+import com.luiz.minhasfinancas.model.enums.TipoLancamento;
 import com.luiz.minhasfinancas.model.repository.LancamentoRepository;
 import com.luiz.minhasfinancas.service.LancamentoService;
+
 import java.math.BigDecimal;
+
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.data.domain.ExampleMatcher.StringMatcher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -59,10 +64,10 @@ public class LancamentoServiceImpl implements LancamentoService {
     @Transactional(readOnly = true)
     public List<Lancamento> buscar(Lancamento lancamentoFiltro) {
 
-        Example example = Example.of(lancamentoFiltro,
+        Example<Lancamento> example = Example.of(lancamentoFiltro,
                 ExampleMatcher.matching()
                         .withIgnoreCase()
-                        .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING));
+                        .withStringMatcher(StringMatcher.CONTAINING));
 
         return repository.findAll(example);
     }
@@ -91,12 +96,12 @@ public class LancamentoServiceImpl implements LancamentoService {
         if (Objects.isNull(lancamento.getUsuario()) || Objects.isNull(lancamento.getUsuario().getId())) {
             throw new RegraNegocioException("Informe um Usuário.");
         }
-        
-        if (Objects.isNull(lancamento.getValor()) || lancamento.getValor().compareTo(BigDecimal.ZERO) < 1){
+
+        if (Objects.isNull(lancamento.getValor()) || lancamento.getValor().compareTo(BigDecimal.ZERO) < 1) {
             throw new RegraNegocioException("Informe um Valor válido.");
         }
-        
-        if(Objects.isNull(lancamento.getTipo())){
+
+        if (Objects.isNull(lancamento.getTipo())) {
             throw new RegraNegocioException("Informe um Tipo de Lançamento válido.");
         }
 
@@ -105,6 +110,23 @@ public class LancamentoServiceImpl implements LancamentoService {
     @Override
     public Optional<Lancamento> obterPorId(Long id) {
         return repository.findById(id);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public BigDecimal obterSaldoPorUsuario(Long id) {
+        BigDecimal receitas = repository.obterSaldoPorTipoLancamentoEUsuario(id, TipoLancamento.RECEITA);
+        BigDecimal despesas = repository.obterSaldoPorTipoLancamentoEUsuario(id, TipoLancamento.DESPESA);
+
+        if (receitas == null) {
+            receitas = BigDecimal.ZERO;
+        }
+
+        if (despesas == null) {
+            despesas = BigDecimal.ZERO;
+        }
+        
+        return receitas.subtract(despesas);
     }
 
 }
