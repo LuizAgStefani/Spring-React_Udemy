@@ -5,6 +5,7 @@
  */
 package com.luiz.minhasfinancas.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -38,5 +39,6 @@ public class Usuario implements Serializable {
     @Column(name = "email")
     private String email;
     @Column(name = "senha")
+    @JsonIgnore
     private String senha;
 }
