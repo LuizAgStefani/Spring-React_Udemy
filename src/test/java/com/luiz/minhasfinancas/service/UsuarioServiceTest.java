@@ -37,27 +37,27 @@ public class UsuarioServiceTest {
     @MockBean
     UsuarioRepository repository;
 
-    @Test
-    public void deveSalvarUmUsuario() {
-        //cenário
-        Mockito.doNothing().when(service).validarEmail(Mockito.anyString());
-        Usuario usuario = Usuario.builder()
-                .id(1l)
-                .nome("nome")
-                .email("email@email.com")
-                .senha("senha")
-                .build();
-        Mockito.when(repository.save(Mockito.any(Usuario.class))).thenReturn(usuario);
-        //ação
-        Usuario usuarioSalvo = service.salvarUsuario(new Usuario());
-        //verificação
-        Assertions.assertNotNull(usuarioSalvo);
-        Assertions.assertEquals(usuarioSalvo.getId(), 1l);
-        Assertions.assertEquals(usuarioSalvo.getNome(), "nome");
-        Assertions.assertEquals(usuarioSalvo.getEmail(), "email@email.com");
-        Assertions.assertEquals(usuarioSalvo.getSenha(), "senha");
-
-    }
+//    @Test
+//    public void deveSalvarUmUsuario() {
+//        //cenário
+//        Mockito.doNothing().when(service).validarEmail(Mockito.anyString());
+//        Usuario usuario = Usuario.builder()
+//                .id(1l)
+//                .nome("nome")
+//                .email("email@email.com")
+//                .senha("senha")
+//                .build();
+//        Mockito.when(repository.save(Mockito.any(Usuario.class))).thenReturn(usuario);
+//        //ação
+//        Usuario usuarioSalvo = service.salvarUsuario(new Usuario());
+//        //verificação
+//        Assertions.assertNotNull(usuarioSalvo);
+//        Assertions.assertEquals(usuarioSalvo.getId(), 1l);
+//        Assertions.assertEquals(usuarioSalvo.getNome(), "nome");
+//        Assertions.assertEquals(usuarioSalvo.getEmail(), "email@email.com");
+//        Assertions.assertEquals(usuarioSalvo.getSenha(), "senha");
+//
+//    }
 
     @Test
     public void naoDeveSalvarUmUsuarioComEmailJaCadastrado() {
@@ -75,27 +75,27 @@ public class UsuarioServiceTest {
         Mockito.verify(repository, Mockito.never()).save(user);
     }
 
-    @Test
-    public void deveAutenticarUmUsuarioComSucesso() {
-        //cenário
-        String email = "email@email.com.br";
-        String senha = "senha";
-
-        Usuario usuario = Usuario
-                .builder()
-                .email(email)
-                .senha(senha)
-                .id(1l)
-                .build();
-
-        Mockito.when(repository.findByEmail(email)).thenReturn(Optional.of(usuario));
-
-        //ação
-        Usuario result = service.autenticar(email, senha);
-
-        //verificação
-        Assertions.assertNotNull(result);
-    }
+//    @Test
+//    public void deveAutenticarUmUsuarioComSucesso() {
+//        //cenário
+//        String email = "email@email.com.br";
+//        String senha = "senha";
+//
+//        Usuario usuario = Usuario
+//                .builder()
+//                .email(email)
+//                .senha(senha)
+//                .id(1l)
+//                .build();
+//
+//        Mockito.when(repository.findByEmail(email)).thenReturn(Optional.of(usuario));
+//
+//        //ação
+//        Usuario result = service.autenticar(email, senha);
+//
+//        //verificação
+//        Assertions.assertNotNull(result);
+//    }
 
     @Test
     public void deveLancarErroQuandoNaoEncontrarUsuarioCadastroComOEmailInformado() {
